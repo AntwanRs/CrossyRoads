@@ -18,7 +18,8 @@ int main() {
         cout << "Menu" << endl;
         cout << "1 Comenzar" << endl;
         cout << "2 Intrucciones para jugar" << endl;
-        cout << "3 Salir" << endl;
+        cout << "3 Escoger personaje" << endl;
+        cout << "4 Salir" << endl;
         cout << "Ingrese su opcion: ";
         cin >> opcion;
 
@@ -32,13 +33,15 @@ int main() {
                 cout << "PASOS PARA JUGAR SDHUDHUSHUD" << endl;
                 break;
             case 3:
-                cout << "Cerrando" << endl;
+                cout << "Personajes: " << endl;
+                break;
+            case 4:
+                cout << "Cerrando..." << endl;
                 break;
             default:
                 cout << "Ingrese una opcion valida" << endl;
-                break;
         }
-    } while (opcion != 3);
+    } while (opcion != 4);
 
     return 0;
 }
