@@ -52,7 +52,7 @@ class mapa {
 private:
 int x, y, c, m;
 
-float vy = 0.0f;
+//float vy = 0.0f;
 
 int SB[13] = {0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36}; //se usa para saber la coordenada en los espacios donde se posiciona el personaje a moverse
 
@@ -100,11 +100,11 @@ mapa(int x1, int y1, int c1, int m1){
     }
     }
 
-    void ejecucion(int &dir){
-    	vy -= 1150.0f*0.0416;
-    	if(vy >= 752.0f)//vy pasa a 800 despues de la resta vy pasa a valer 752
-    		direccion(dir);
-    }
+//    void ejecucion(int &dir){
+  //  	vy -= 1150.0f*0.0416;
+    //	if(vy >= 752.0f)//vy pasa a 800 despues de la resta vy pasa a valer 752
+    //		direccion(dir);
+    //}
 
     void direccion(int &dir){
     	switch(dir){
