@@ -7,7 +7,7 @@
 #include <time.h>
 
 using namespace std;
-const int WIDTH = 600, HEIGHT = 200;
+const int WIDTH = 600, HEIGHT = 200; //espacio queva a tener la consola de juego
 const int dW = 10, dH = 5;
 
 char obs[12][2][8] =
