@@ -5,7 +5,7 @@ using namespace std;
  *
  * // funcion para iniciar nivel
 //funcion para iniciar juego
-void StartGame()
+void IniciarJuego()
 {
     Pantalla();
     while (!GameOver() && !Victoria() && tiempoC)
@@ -57,8 +57,8 @@ void StartGame()
     {
         for (int i = 0; i < 3; ++i)
         {
-            boost(carrosA);
-            boost(carrosB);
+            boost(autos);
+            boost(autosB);
             boost(animalA);
             boost(animalB);
         }
@@ -69,7 +69,7 @@ void StartGame()
 //fin del juego
 bool GameOver()
 {
-    if (persona != nullptr && persona->Dead())
+    if (persona != nullptr && persona->Muerte())
     {
         tiempoC = false;
         return true;
