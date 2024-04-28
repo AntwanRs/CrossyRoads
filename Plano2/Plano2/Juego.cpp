@@ -102,17 +102,6 @@ void Juego::Ciclo() {
 Juego::Juego() {
 	window = new sf::RenderWindow(sf::VideoMode(1800, 1200), "Intento");
 
-	// Create rectangle shapes for the road and sidewalk
-	sf::RectangleShape road(sf::Vector2f(window->getSize().x, window->getSize().y / 2.0f));
-	road.setFillColor(sf::Color(128, 128, 128)); // Light gray for road
-
-	sf::RectangleShape sidewalk(sf::Vector2f(window->getSize().x / 5.0f, window->getSize().y / 2.0f));
-	sidewalk.setFillColor(sf::Color(200, 200, 200)); // Lighter gray for sidewalk
-
-	// Position the shapes
-	sidewalk.setPosition(sf::Vector2f(0, window->getSize().y / 2.0f));
-	road.setPosition(sf::Vector2f(0, 0));
-
 	//inicializa y agrega camiones al vectorcito lindo >>>>>::((((((
 	camiones.push_back(Camion(0, window->getSize().y / 2));
 	camiones.push_back(Camion(700, window->getSize().y / 2));
