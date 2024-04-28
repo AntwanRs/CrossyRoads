@@ -1,0 +1,47 @@
+﻿  Juego.cpp
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         and
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:             T=float
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(106,56): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(117,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(117,51): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(117,51): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(117,51): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(117,51): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(118,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(118,53): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(118,53): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(118,53): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(118,53): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(119,54): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(119,54): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(119,54): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(119,54): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(119,54): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(121,51): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(121,51): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(121,51): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(121,51): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(121,51): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(122,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(122,53): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(122,53): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(122,53): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(122,53): warning C4244:         ]
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(123,54): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(123,54): warning C4244:         with
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(123,54): warning C4244:         [
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(123,54): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\Plano2\Plano2\Juego.cpp(123,54): warning C4244:         ]
+  main.cpp
+  Generating Code...
+sfml-graphics-s-d.lib(RenderTarget.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(RenderTarget.obj)' or at ''; linking object as if no debug info
+sfml-graphics-s-d.lib(View.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(View.obj)' or at ''; linking object as if no debug info
+sfml-graphics-s-d.lib(Shape.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Shape.obj)' or at ''; linking object as if no debug info
+sfml-window-s-d.lib(JoystickImpl.obj) : warning LNK4099: PDB '' was not found with 'sfml-window-s-d.lib(JoystickImpl.obj)' or at ''; linking object as if no debug info
+  Plano2.vcxproj -> C:\Users\alici\source\repos\Plano2\x64\Debug\Plano2.exe
