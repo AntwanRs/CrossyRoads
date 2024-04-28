@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+//template de sfml
 class Window {
 
 	sf::RenderWindow* window = nullptr;
