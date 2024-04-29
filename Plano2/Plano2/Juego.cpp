@@ -102,6 +102,8 @@ void Juego::Ciclo() {
 Juego::Juego() {
 	window = new sf::RenderWindow(sf::VideoMode(1800, 1200), "Intento");
 
+	//aqui va el menu
+
 	//inicializa y agrega camiones al vectorcito lindo >>>>>::((((((
 	camiones.push_back(Camion(0, window->getSize().y / 2));
 	camiones.push_back(Camion(700, window->getSize().y / 2));
