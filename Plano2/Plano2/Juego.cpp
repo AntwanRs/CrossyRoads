@@ -148,8 +148,6 @@ void Juego::Ciclo() {
 		// Dibujar objetos
 
 		window->clear();
-	}
-
 		for (Camion& camion : camiones) {
 			camion.Dibujo(window);
 		}
@@ -162,5 +160,6 @@ void Juego::Ciclo() {
 		persona->Dibujo(window);
 
 		window->display();
+	}
 	}
 
