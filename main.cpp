@@ -1,22 +1,49 @@
+#include <SFML/Graphics.hpp>
 #include <iostream>
+using namespace std;
 
 int main() {
-    //color en el txt
+    // crear ventana extra
+    sf::RenderWindow window(sf::VideoMode(1000, 700), "Imagen con SFML");
 
-    std::string green = "\033[1;32m";
+    // Cargar archivo
+    sf::Texture texture;
+    if (!texture.loadFromFile("Texture/DEAUTOR.jpg")) {
+        std::cerr << "Error al cargar la imagen" << std::endl;
+        return 1;
+    }
 
-    std::cout << green;
-    std::cout << " --------------------------------------------------------------------------\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " |                              GAME OVER                                 |\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " |                                SALIR                                   |\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " |                           JUGAR DE NUEVO                               |\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " |                                                                        |\n";
-    std::cout << " --------------------------------------------------------------------------\n";
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+
+    sprite.setScale(1.77f, 1.7f); // Ajusta los valores según sea necesario
+
+    // ver q sirva
+    bool gameOverPrinted = false;
+
+    // ciclo de la impresion
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+
+        window.clear();
+        window.draw(sprite);
+
+        // Imprimir mensaje
+        if (!gameOverPrinted) {
+            cout << "GAME OVER - FALTA MEJORAR" << std::endl;
+            cout << "1 - Intentar de nuevo "<< std::endl;
+            cout << "2 - Rendirse " << std::endl;
+            gameOverPrinted = true; // Marca como impreso
+        }
+
+        window.display();
+    }
 
     return 0;
 }
