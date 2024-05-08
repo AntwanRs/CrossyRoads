@@ -1,26 +1,38 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <cstdlib> // Numeros para que los carros no sean iguales
-#include <ctime>   
+#include <cstdlib>
+#include <ctime>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(2000, 1000), "Nivel 1"); // Donde se abre la ventana
-    sf::Texture obstacleTexture;
-    if (!obstacleTexture.loadFromFile("Texture/carro.jpeg")) { // se carga la imagen del carro verde
+    sf::RenderWindow window(sf::VideoMode(2000, 1000), "Nivel 1");
+
+    // Cargar las dos texturas
+    sf::Texture textureCarro;
+    sf::Texture textureCarroFuego;
+    if (!textureCarro.loadFromFile("Texture/carro.jpeg")) {
         std::cerr << "Error cargando la imagen carro.jpeg" << std::endl;
+        return 1;
+    }
+    if (!textureCarroFuego.loadFromFile("Texture/carrofuego.png")) {
+        std::cerr << "Error cargando la imagen carrofuego.png" << std::endl;
         return 1;
     }
 
     // Crear 3 sprites para los carros
-    sf::Sprite obstacle1(obstacleTexture);
-    sf::Sprite obstacle2(obstacleTexture);
-    sf::Sprite obstacle3(obstacleTexture);
+    sf::Sprite obstacle1(textureCarro);
+    sf::Sprite obstacle2(textureCarro);
+    sf::Sprite obstacle3(textureCarro);
+
+    // Ajustar el tamaño de los sprites a la mitad del tamaño original
+    obstacle1.setScale(0.5f, 0.5f);
+    obstacle2.setScale(0.5f, 0.5f);
+    obstacle3.setScale(0.5f, 0.5f);
 
     // Configurar la semilla para la generación aleatoria
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    //rango de cada carro
-    int thirdOfScreen = window.getSize().y / 7;
+    // Rango de cada carro
+    int thirdOfScreen = window.getSize().y / 3;
     obstacle1.setPosition(0.f, static_cast<float>(std::rand() % thirdOfScreen));
     obstacle2.setPosition(0.f, static_cast<float>(thirdOfScreen + std::rand() % thirdOfScreen));
     obstacle3.setPosition(0.f, static_cast<float>((2 * thirdOfScreen) + std::rand() % thirdOfScreen));
@@ -30,12 +42,6 @@ int main() {
     float speed2 = 0.3f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.4f));
     float speed3 = 0.8f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.7f));
 
-    // no tengan misma velocidad
-    while (speed1 == speed2 || speed1 == speed3 || speed2 == speed3) {
-        speed2 = 0.3f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.2f));
-        speed3 = 0.2f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.1f));
-    }
-
     // Bucle principal
     while (window.isOpen()) {
         sf::Event event;
@@ -44,23 +50,46 @@ int main() {
                 window.close();
         }
 
-        //velocidades diferentes a cada uno
-        obstacle1.move(speed1, 0.f); // La velocidad
-        obstacle2.move(speed2, 0.f); // La velocidad
-        obstacle3.move(speed3, 0.f); // La velocidad
+        // Mover los carros y cambiar la textura si han pasado la mitad de la pantalla
+        obstacle1.move(speed1, 0.f);
+        if (obstacle1.getPosition().x > window.getSize().x / 2) {
+            obstacle1.setTexture(textureCarroFuego);
+        }
+        else {
+            obstacle1.setTexture(textureCarro);
+        }
 
-        // regresar el carro al principio
+        obstacle2.move(speed2, 0.f);
+        if (obstacle2.getPosition().x > window.getSize().x / 2) {
+            obstacle2.setTexture(textureCarroFuego);
+        }
+        else {
+            obstacle2.setTexture(textureCarro);
+        }
+
+        obstacle3.move(speed3, 0.f);
+        if (obstacle3.getPosition().x > window.getSize().x / 2) {
+            obstacle3.setTexture(textureCarroFuego);
+        }
+        else {
+            obstacle3.setTexture(textureCarro);
+        }
+
+        // Regresar el carro al principio si sale de la pantalla
         if (obstacle1.getPosition().x > window.getSize().x) {
             obstacle1.setPosition(0.f, static_cast<float>(std::rand() % thirdOfScreen));
-            speed1 = 0.8f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.5f)); // cambio de velocidad
+            speed1 = 0.7f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.1f));
+            obstacle1.setTexture(textureCarro); // Restablecer la textura original
         }
         if (obstacle2.getPosition().x > window.getSize().x) {
             obstacle2.setPosition(0.f, static_cast<float>(thirdOfScreen + std::rand() % thirdOfScreen));
-            speed2 = 0.2f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.5f)); 
+            speed2 = 0.3f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.4f));
+            obstacle2.setTexture(textureCarro); // Restablecer la textura original
         }
         if (obstacle3.getPosition().x > window.getSize().x) {
             obstacle3.setPosition(0.f, static_cast<float>((2 * thirdOfScreen) + std::rand() % thirdOfScreen));
-            speed3 = 0.5f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.5f)); 
+            speed3 = 0.8f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.7f));
+            obstacle3.setTexture(textureCarro); // Restablecer la textura original
         }
 
         // Dibujar carros
