@@ -99,8 +99,15 @@ bool detectarColision(const sf::RectangleShape& jugador, const std::vector<Entid
     return false;
 }
 
+void perderJuego(sf::RenderWindow& ventana) {
+    // Aquí puedes agregar la lógica para mostrar un mensaje de pérdida o realizar cualquier otra acción que desees al perder el juego.
+    // Por ejemplo, podrías mostrar un mensaje en la ventana o reiniciar el juego.
+    std::cout << "Has perdido el juego." << std::endl;
+    ventana.close(); // Esto cierra la ventana y finaliza el juego.
+}
+
 int main() {
-    sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "CrossyRoads");
+    sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "Frogger");
     ventana.setFramerateLimit(60);
 
     std::vector<Entidad*> entidades;
@@ -170,6 +177,10 @@ int main() {
                 nuevoCarro->randomizar();
                 entidades.push_back(nuevoCarro);
             }
+        }
+
+        if (detectarColision(jugador, entidades)) {
+            perderJuego(ventana);
         }
 
         ventana.clear();
