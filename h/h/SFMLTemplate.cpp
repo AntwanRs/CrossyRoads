@@ -12,6 +12,10 @@ const float velocidadMaximaCarro = 300.0f;
 const float limiteReinicio = -200.0f;
 const float espacioEntreCarros = 200.0f;
 const float retrasoSpawnCarro = 1.0f;
+const int numLineasCarretera = 5;
+const int grosorLineaCarretera = 5;
+const float distanciaMinimaCarros = 200.0f; // Distancia mínima entre carros en el eje x
+const float tiempoLimiteInactividad = 30.0f; // Tiempo límite de inactividad en segundos
 
 enum class TipoEntidad { Jugador, Carro };
 
@@ -34,7 +38,8 @@ private:
     float velocidad;
 
 public:
-    Carro(float velocidadBase, float posY) : velocidad(velocidadBase + (rand() % 100)) {
+    Carro(float velocidadBase, float posY)
+        : velocidad(velocidadBase + (rand() % 100)) {
         forma.setSize(sf::Vector2f(150.0f, 80.0f));
         forma.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
         forma.setPosition(-150.0f, posY);
@@ -43,7 +48,6 @@ public:
     void randomizar() override {
         forma.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
         velocidad = velocidadMinimaCarro + (rand() % static_cast<int>(velocidadMaximaCarro - velocidadMinimaCarro + 1));
-        forma.setPosition(-150.0f, rand() % (altoVentana - 200));
     }
 
     TipoEntidad getTipo() const override {
@@ -76,18 +80,18 @@ public:
 
     void update(float deltaTime) override {
         forma.move(velocidad * deltaTime, 0.0f);
-        if (forma.getPosition().x > anchoVentana) {
-            forma.setPosition(-forma.getSize().x, forma.getPosition().y);
-        }
     }
 };
 
-void reiniciarCarros(std::vector<Entidad*>& entidades) {
+void reiniciarJuego(sf::RectangleShape& jugador, std::vector<Entidad*>& entidades, std::vector<bool>& carrilesOcupados) {
+    jugador.setPosition(anchoVentana / 2 - jugador.getSize().x / 2, altoVentana - jugador.getSize().y);
+    std::fill(carrilesOcupados.begin(), carrilesOcupados.end(), false);
+
+    // Eliminar carros existentes
     for (auto& entidad : entidades) {
-        if (entidad->getTipo() == TipoEntidad::Carro) {
-            entidad->randomizar();
-        }
+        delete entidad;
     }
+    entidades.clear();
 }
 
 bool detectarColision(const sf::RectangleShape& jugador, const std::vector<Entidad*>& entidades) {
@@ -99,11 +103,30 @@ bool detectarColision(const sf::RectangleShape& jugador, const std::vector<Entid
     return false;
 }
 
-void perderJuego(sf::RenderWindow& ventana) {
-    // Aquí puedes agregar la lógica para mostrar un mensaje de pérdida o realizar cualquier otra acción que desees al perder el juego.
-    // Por ejemplo, podrías mostrar un mensaje en la ventana o reiniciar el juego.
-    std::cout << "Has perdido el juego." << std::endl;
-    ventana.close(); // Esto cierra la ventana y finaliza el juego.
+void eliminarCarrosFueraDePantalla(std::vector<Entidad*>& entidades) {
+    auto it = entidades.begin();
+    while (it != entidades.end()) {
+        if ((*it)->getTipo() == TipoEntidad::Carro) {
+            if ((*it)->getPosition().x > anchoVentana) {
+                delete *it;
+                it = entidades.erase(it);
+                continue;
+            }
+        }
+        ++it;
+    }
+}
+
+bool hayColisionCarroEnX(const sf::RectangleShape& carroNuevo, const std::vector<Entidad*>& entidades) {
+    for (const auto& entidad : entidades) {
+        if (entidad->getTipo() == TipoEntidad::Carro) {
+            if (entidad->getPosition().x + entidad->getSize().x > carroNuevo.getPosition().x &&
+                carroNuevo.getPosition().x + carroNuevo.getSize().x > entidad->getPosition().x) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 int main() {
@@ -111,6 +134,7 @@ int main() {
     ventana.setFramerateLimit(60);
 
     std::vector<Entidad*> entidades;
+    std::vector<bool> carrilesOcupados(altoVentana / espacioEntreCarros, false);
 
     srand(time(nullptr));
 
@@ -124,10 +148,11 @@ int main() {
     sf::RectangleShape calle(sf::Vector2f(anchoVentana, altoVentana));
     calle.setFillColor(sf::Color(100, 100, 100));
 
-    float velocidadBaseCarro = velocidadMinimaCarro;
     float temporizadorSpawnCarro = 0.0f;
+    float temporizadorInactividad = 0.0f; // Temporizador para rastrear la inactividad del jugador
 
     sf::Clock reloj;
+    sf::Clock inactividadReloj; // Reloj para rastrear la inactividad del jugador
 
     while (ventana.isOpen()) {
         sf::Time deltaTiempo = reloj.restart();
@@ -141,55 +166,68 @@ int main() {
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && jugador.getPosition().x > 0) {
             jugador.move(-velocidadJugador * deltaTiempo.asSeconds(), 0.0f);
+            temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && jugador.getPosition().x < anchoVentana - jugador.getSize().x) {
             jugador.move(velocidadJugador * deltaTiempo.asSeconds(), 0.0f);
+            temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             jugador.move(0.0f, -velocidadJugador * deltaTiempo.asSeconds());
+            temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             jugador.move(0.0f, velocidadJugador * deltaTiempo.asSeconds());
+            temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
+        }
+
+        // Actualizar el temporizador de inactividad
+        temporizadorInactividad += inactividadReloj.restart().asSeconds();
+        if (temporizadorInactividad >= tiempoLimiteInactividad) {
+            std::cout << "Te has quedado inactivo durante demasiado tiempo. ¡Has perdido el juego!" << std::endl;
+            ventana.close();
         }
 
         if (jugador.getPosition().y < limiteReinicio) {
-            jugador.setPosition(anchoVentana / 2 - jugador.getSize().x / 2, altoVentana - jugador.getSize().y);
-            reiniciarCarros(entidades);
+            reiniciarJuego(jugador, entidades, carrilesOcupados);
         }
 
         temporizadorSpawnCarro += deltaTiempo.asSeconds();
         if (temporizadorSpawnCarro >= retrasoSpawnCarro) {
             temporizadorSpawnCarro = 0.0f;
+            float posY = (rand() % carrilesOcupados.size()) * espacioEntreCarros;
 
-            float posY = rand() % (altoVentana - 200);
-            bool espacioDisponible = true;
-            for (const auto& entidad : entidades) {
-                if (entidad->getTipo() == TipoEntidad::Carro &&
-                    entidad->getPosition().y < posY + espacioEntreCarros &&
-                    entidad->getPosition().y + entidad->getSize().y > posY) {
-                    espacioDisponible = false;
-                    break;
-                }
+            sf::RectangleShape carroNuevo(sf::Vector2f(150.0f, 80.0f));
+            carroNuevo.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
+            carroNuevo.setPosition(-150.0f, posY);
+
+            while (hayColisionCarroEnX(carroNuevo, entidades)) {
+                posY = (rand() % carrilesOcupados.size()) * espacioEntreCarros;
+                carroNuevo.setPosition(-150.0f, posY);
             }
 
-            if (espacioDisponible) {
-                Carro* nuevoCarro = new Carro(velocidadBaseCarro, posY);
-                nuevoCarro->randomizar();
-                entidades.push_back(nuevoCarro);
-            }
+            Carro* nuevoCarro = new Carro(velocidadMinimaCarro + (rand() % static_cast<int>(velocidadMaximaCarro - velocidadMinimaCarro + 1)), posY);
+            entidades.push_back(nuevoCarro);
         }
 
+        eliminarCarrosFueraDePantalla(entidades);
+
         if (detectarColision(jugador, entidades)) {
-            perderJuego(ventana);
+            std::cout << "Has sido golpeado por un carro. ¡Has perdido el juego!" << std::endl;
+            ventana.close();
         }
 
         ventana.clear();
         ventana.draw(calle);
+
+        ventana.draw(jugador);
+
+        // Dibujar carros
         for (const auto& entidad : entidades) {
             entidad->update(deltaTiempo.asSeconds());
             entidad->draw(ventana);
         }
-        ventana.draw(jugador);
+
         ventana.display();
     }
 
