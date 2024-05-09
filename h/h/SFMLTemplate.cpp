@@ -100,7 +100,7 @@ bool detectarColision(const sf::RectangleShape& jugador, const std::vector<Entid
 }
 
 int main() {
-    sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "Frogger");
+    sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "CrossyRoads");
     ventana.setFramerateLimit(60);
 
     std::vector<Entidad*> entidades;
