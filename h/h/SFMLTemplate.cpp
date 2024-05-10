@@ -4,11 +4,11 @@
 #include <cstdlib>
 #include <ctime>
 
-const int anchoVentana = 1920; 
-const int altoVentana = 1200; 
-const float velocidadJugador = 200.0f; 
-float velocidadMinimaCarroInicial = 150.0f; 
-float velocidadMaximaCarroInicial = 300.0f; 
+const int anchoVentana = 1920;
+const int altoVentana = 1200;
+const float velocidadJugador = 200.0f;
+float velocidadMinimaCarroInicial = 150.0f;
+float velocidadMaximaCarroInicial = 300.0f;
 const float limiteReinicio = -200.0f; // Limite de reinicio del jugador en la pantalla
 const float espacioEntreCarros = 200.0f; // Espacio entre carros en la carretera
 const float retrasoSpawnCarro = 1.0f; // Retraso entre la aparicion de carros (tal vez cambiar esto pq hace bien facil el juego)
@@ -116,24 +116,20 @@ void reiniciarJuego(sf::RectangleShape& jugador, std::vector<Entidad*>& entidade
 }
 
 // Funcion para detectar colisiones entre el jugador y las entidades (los carros)
-bool detectarColision(const sf::RectangleShape& jugador, const std::vector<Entidad*>& entidades, const ZonaSegura& zonaSegura) {
+bool hayColisionJugadorCarro(const sf::RectangleShape& jugador, const std::vector<Entidad*>& entidades) {
     for (const auto& entidad : entidades) {
-        if (entidad->getTipo() == TipoEntidad::Carro && entidad->colision(jugador)) {
-            // Verificar si el jugador esta dentro de la zona segura
-            if (jugador.getPosition().y >= zonaSegura.posicion.y && jugador.getPosition().y + jugador.getSize().y <= zonaSegura.posicion.y + zonaSegura.tamano.y) {
-                return false; // No hay colision si el jugador esta dentro de la zona segura
-            }
-            else {
-                return true; // Hay colision si el jugador no esta dentro de la zona segura
+        if (entidad->getTipo() == TipoEntidad::Carro) {
+            if (entidad->colision(jugador)) {
+                return true; // Hay colisión entre el jugador y un carro
             }
         }
     }
-    return false; // No hay colision
+    return false; // No hay colisión entre el jugador y ningún carro
 }
 
 // Funcion para eliminar carros que están fuera de la pantalla
 void eliminarCarrosFueraDePantalla(std::vector<Entidad*>& entidades) {
-    auto it = entidades.begin(); 
+    auto it = entidades.begin();
     while (it != entidades.end()) {
         if ((*it)->getTipo() == TipoEntidad::Carro) {
             if ((*it)->getPosition().x > anchoVentana) {
@@ -146,19 +142,7 @@ void eliminarCarrosFueraDePantalla(std::vector<Entidad*>& entidades) {
     }
 }
 
-// Funcion para verificar si hay colision de carros en el eje x
-bool hayColisionCarroEnX(const sf::RectangleShape& carroNuevo, const std::vector<Entidad*>& entidades) {
-    for (const auto& entidad : entidades) {
-        if (entidad->getTipo() == TipoEntidad::Carro) {
-            if (entidad->getPosition().x + entidad->getSize().x > carroNuevo.getPosition().x &&
-                carroNuevo.getPosition().x + carroNuevo.getSize().x > entidad->getPosition().x) {
-                return true; // Hay colision en el eje x
-            }
-        }
-    }
-    return false; // No hay colision en el eje x
-}
-
+// En el bucle principal...
 int main() {
     sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "CrossyRoads");
     ventana.setFramerateLimit(60); // Establecer limite de frames
@@ -203,7 +187,7 @@ int main() {
             temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && jugador.getPosition().x < anchoVentana - jugador.getSize().x) {
-            jugador.move(velocidadJugador * deltaTiempo.asSeconds(), 0.0f); // Mover el jugador hacia la derecha
+            jugador.move(velocidadJugador * deltaTiempo.asSeconds(), 0.0f); //
             temporizadorInactividad = 0.0f; // Restablecer el temporizador de inactividad si el jugador se mueve
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -235,7 +219,7 @@ int main() {
             carroNuevo.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256)); // Color aleatorio para el nuevo carro
             carroNuevo.setPosition(-150.0f, posY); // Posicion inicial del nuevo carro fuera de la pantalla
 
-            while (hayColisionCarroEnX(carroNuevo, entidades)) {
+            while (hayColisionJugadorCarro(carroNuevo, entidades)) {
                 posY = (rand() % carrilesOcupados.size()) * espacioEntreCarros; // Obtener una nueva posicion vertical si hay colision en el eje x
                 carroNuevo.setPosition(-150.0f, posY); // Establecer la nueva posicion del nuevo carro
             }
@@ -246,6 +230,15 @@ int main() {
         }
 
         eliminarCarrosFueraDePantalla(entidades); // Eliminar carros que estan fuera de la pantalla (SI SE QUITA ESTO EL JUEGO SE TRABA)
+
+        // Verificar colisión entre el jugador y los carros
+        if (hayColisionJugadorCarro(jugador, entidades)) {
+            // Verificar si la colisión ocurrió fuera de la zona segura
+            if (jugador.getPosition().y < zonaSegura.posicion.y || jugador.getPosition().y > zonaSegura.posicion.y + zonaSegura.tamano.y) {
+                std::cout << "¡Has sido atropellado por un carro fuera de la zona segura! ¡Has perdido el juego!" << std::endl;
+                ventana.close(); // Cerrar la ventana
+            }
+        }
 
         ventana.clear(); // Limpiar la ventana
 
