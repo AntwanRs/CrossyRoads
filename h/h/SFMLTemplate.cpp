@@ -43,14 +43,14 @@ public:
 // Clase para representar un carro en el juego
 class Carro : public Entidad {
 private:
-    sf::RectangleShape forma; // Forma del carro
+    sf::Sprite forma; // Cambiamos de sf::RectangleShape a sf::Sprite
     float velocidad; // Velocidad del carro
 
 public:
-    Carro(float velocidadBase, float posY)
+    Carro(float velocidadBase, float posY, sf::Texture& texture)
         : velocidad(velocidadBase) {
-        forma.setSize(sf::Vector2f(150.0f, 80.0f)); // Tamano del carro
-        forma.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256)); // Color aleatorio para el carro (creo que esto no importa cuando ya pongamos las imagenes)
+        forma.setTexture(texture); // Establecer la textura de la forma del carro
+        forma.setScale(0.4f, 0.4f); // Escalar la textura según sea necesario
         forma.setPosition(-150.0f, posY); // Posicion inicial del carro fuera de la pantalla
     }
 
@@ -71,7 +71,7 @@ public:
     }
 
     sf::Vector2f getSize() const override {
-        return forma.getSize(); // Obtener el tamano del carro
+        return sf::Vector2f(forma.getGlobalBounds().width, forma.getGlobalBounds().height); // Obtener el tamano del carro
     }
 
     void setPosition(const sf::Vector2f& position) override {
@@ -142,7 +142,6 @@ void eliminarCarrosFueraDePantalla(std::vector<Entidad*>& entidades) {
     }
 }
 
-// En el bucle principal...
 int main() {
     sf::RenderWindow ventana(sf::VideoMode(anchoVentana, altoVentana), "CrossyRoads");
     ventana.setFramerateLimit(60); // Establecer limite de frames
@@ -160,8 +159,9 @@ int main() {
     sf::View vista(sf::FloatRect(0, 0, anchoVentana, altoVentana)); // Vista de la ventana
     ventana.setView(vista); // Establecer la vista de la ventana
 
+
     sf::RectangleShape calle(sf::Vector2f(anchoVentana, altoVentana)); // Forma de la calle
-    calle.setFillColor(sf::Color(100, 100, 100)); // Color gris para la calle
+    calle.setFillColor(sf::Color(100, 100, 100)); // Color gris para la calle 
 
     float temporizadorSpawnCarro = 0.0f; // Temporizador para la aparicion de carros
     float temporizadorInactividad = 0.0f; // Temporizador para rastrear la inactividad del jugador
@@ -171,6 +171,14 @@ int main() {
 
     // Generar zona segura
     reiniciarJuego(jugador, entidades, carrilesOcupados, zonaSegura);
+
+    // Cargar textura del carro
+    sf::Texture carroTexture;
+    if (!carroTexture.loadFromFile("carro.png")) {
+        // Manejar el error si no se puede cargar la imagen
+        std::cerr << "Error al cargar la textura del carro" << std::endl;
+        return 1; // Salir del programa con código de error
+    }
 
     while (ventana.isOpen()) {
         sf::Time deltaTiempo = reloj.restart(); // Obtener el tiempo transcurrido desde la ultima actualizacion
@@ -219,21 +227,23 @@ int main() {
             carroNuevo.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256)); // Color aleatorio para el nuevo carro
             carroNuevo.setPosition(-150.0f, posY); // Posicion inicial del nuevo carro fuera de la pantalla
 
-            while (hayColisionJugadorCarro(carroNuevo, entidades)) {
-                posY = (rand() % carrilesOcupados.size()) * espacioEntreCarros; // Obtener una nueva posicion vertical si hay colision en el eje x
-                carroNuevo.setPosition(-150.0f, posY); // Establecer la nueva posicion del nuevo carro
+            while (hayColisionJugadorCarro(carroNuevo, entidades) ||
+                (carroNuevo.getPosition().y >= zonaSegura.posicion.y &&
+                    carroNuevo.getPosition().y <= zonaSegura.posicion.y + zonaSegura.tamano.y + 110)) { // Sumamos 110 para que esté un poco más alto que la altura de la zona segura
+                posY = (rand() % carrilesOcupados.size()) * espacioEntreCarros; // Obtener una nueva posición vertical
+                carroNuevo.setPosition(-150.0f, posY); // Establecer la nueva posición del nuevo carro
             }
 
             float velocidadCarro = velocidadMinimaCarroInicial + (rand() % static_cast<int>(velocidadMaximaCarroInicial - velocidadMinimaCarroInicial + 1)); // Velocidad aleatoria para el nuevo carro
-            Carro* nuevoCarro = new Carro(velocidadCarro, posY); // Crear un nuevo objeto carro
+            Carro* nuevoCarro = new Carro(velocidadCarro, posY, carroTexture); // Crear un nuevo objeto carro
             entidades.push_back(nuevoCarro); // Agregar el nuevo carro al vector de entidades
         }
 
         eliminarCarrosFueraDePantalla(entidades); // Eliminar carros que estan fuera de la pantalla (SI SE QUITA ESTO EL JUEGO SE TRABA)
 
-        // Verificar colisión entre el jugador y los carros
+        // Verificar colision entre el jugador y los carros
         if (hayColisionJugadorCarro(jugador, entidades)) {
-            // Verificar si la colisión ocurrió fuera de la zona segura
+            // Verificar si la colision ocurrio fuera de la zona segura
             if (jugador.getPosition().y < zonaSegura.posicion.y || jugador.getPosition().y > zonaSegura.posicion.y + zonaSegura.tamano.y) {
                 std::cout << "¡Has sido atropellado por un carro fuera de la zona segura! ¡Has perdido el juego!" << std::endl;
                 ventana.close(); // Cerrar la ventana
