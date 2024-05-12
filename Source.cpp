@@ -6,20 +6,6 @@
 
 using namespace std;
 
-void moveObstacle(sf::Sprite& obstacle, sf::Texture& textureCarro, sf::Texture& textureCarroFuego, float& speed, int thirdOfScreen) {
-    obstacle.move(speed, 0.f);
-    if (obstacle.getPosition().x > 1000) {
-        obstacle.setPosition(0.f, static_cast<float>(rand() % thirdOfScreen));
-        speed = 0.7f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.1f));
-        obstacle.setTexture(textureCarro);
-    }
-    if (obstacle.getPosition().x > 500) {
-        obstacle.setTexture(textureCarroFuego);
-    }
-    else {
-        obstacle.setTexture(textureCarro);
-    }
-} 
 
 
 int main() {
@@ -47,39 +33,45 @@ int main() {
 
         switch (opcion) {
         case 1: {
-            cout << "start" << endl;
             sf::RenderWindow window(sf::VideoMode(2000, 1000), "Nivel 1");
 
+            // Cargar las dos texturas
             sf::Texture textureCarro;
             sf::Texture textureCarroFuego;
             if (!textureCarro.loadFromFile("Texture/carro.jpeg")) {
-                cerr << "Error cargando la imagen carro.jpeg" << endl;
+                std::cerr << "Error cargando la imagen carro.jpeg" << std::endl;
                 return 1;
             }
             if (!textureCarroFuego.loadFromFile("Texture/carrofuego.png")) {
-                cerr << "Error cargando la imagen carrofuego.png" << endl;
+                std::cerr << "Error cargando la imagen carrofuego.png" << std::endl;
                 return 1;
             }
 
+            // Crear 3 sprites para los carros
             sf::Sprite obstacle1(textureCarro);
             sf::Sprite obstacle2(textureCarro);
             sf::Sprite obstacle3(textureCarro);
 
+            // Ajustar el tamanoo de los sprites a la mitad del tamaño original
             obstacle1.setScale(0.5f, 0.5f);
             obstacle2.setScale(0.5f, 0.5f);
             obstacle3.setScale(0.5f, 0.5f);
 
-            srand(static_cast<unsigned int>(time(nullptr)));
+            // Configurar la semilla para la generación aleatoria
+            std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
+            // Rango de cada carro
             int thirdOfScreen = window.getSize().y / 3;
-            obstacle1.setPosition(0.f, static_cast<float>(rand() % thirdOfScreen));
-            obstacle2.setPosition(0.f, static_cast<float>(thirdOfScreen + rand() % thirdOfScreen));
-            obstacle3.setPosition(0.f, static_cast<float>((2 * thirdOfScreen) + rand() % thirdOfScreen));
+            obstacle1.setPosition(0.f, static_cast<float>(std::rand() % thirdOfScreen));
+            obstacle2.setPosition(0.f, static_cast<float>(thirdOfScreen + std::rand() % thirdOfScreen));
+            obstacle3.setPosition(0.f, static_cast<float>((2 * thirdOfScreen) + std::rand() % thirdOfScreen));
 
-            float speed1 = 0.7f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.1f));
-            float speed2 = 0.3f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.4f));
-            float speed3 = 0.8f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.7f));
+            // Velocidades diferentes para cada carro
+            float speed1 = 0.7f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.1f));
+            float speed2 = 0.3f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.4f));
+            float speed3 = 0.8f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.7f));
 
+            // Bucle principal
             while (window.isOpen()) {
                 sf::Event event;
                 while (window.pollEvent(event)) {
@@ -87,31 +79,94 @@ int main() {
                         window.close();
                 }
 
-                moveObstacle(obstacle1, textureCarro, textureCarroFuego, speed1, thirdOfScreen);
-                moveObstacle(obstacle2, textureCarro, textureCarroFuego, speed2, thirdOfScreen);
-                moveObstacle(obstacle3, textureCarro, textureCarroFuego, speed3, thirdOfScreen);
+               //mover carros
+                obstacle1.move(speed1, 0.f);
+                if (obstacle1.getPosition().x > window.getSize().x / 2) {
+                    obstacle1.setTexture(textureCarroFuego);
+                }
+                else {
+                    obstacle1.setTexture(textureCarro);
+                }
 
+                obstacle2.move(speed2, 0.f);
+                if (obstacle2.getPosition().x > window.getSize().x / 2) {
+                    obstacle2.setTexture(textureCarroFuego);
+                }
+                else {
+                    obstacle2.setTexture(textureCarro);
+                }
+
+                obstacle3.move(speed3, 0.f);
+                if (obstacle3.getPosition().x > window.getSize().x / 2) {
+                    obstacle3.setTexture(textureCarroFuego);
+                }
+                else {
+                    obstacle3.setTexture(textureCarro);
+                }
+
+                // Regresar el carro al principio si sale de la pantalla
+                if (obstacle1.getPosition().x > window.getSize().x) {
+                    obstacle1.setPosition(0.f, static_cast<float>(std::rand() % thirdOfScreen));
+                    speed1 = 0.7f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.1f));
+                    obstacle1.setTexture(textureCarro); // Restablecer la textura original
+                }
+                if (obstacle2.getPosition().x > window.getSize().x) {
+                    obstacle2.setPosition(0.f, static_cast<float>(thirdOfScreen + std::rand() % thirdOfScreen));
+                    speed2 = 0.3f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.4f));
+                    obstacle2.setTexture(textureCarro); // Restablecer la textura original
+                }
+                if (obstacle3.getPosition().x > window.getSize().x) {
+                    obstacle3.setPosition(0.f, static_cast<float>((2 * thirdOfScreen) + std::rand() % thirdOfScreen));
+                    speed3 = 0.8f + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / 0.7f));
+                    obstacle3.setTexture(textureCarro); // Restablecer la textura original
+                }
+
+                // Dibujar carros
                 window.clear();
                 window.draw(obstacle1);
                 window.draw(obstacle2);
                 window.draw(obstacle3);
                 window.display();
             }
-            break;
+
+            return 0;
         }
         case 2:
             cout << "Instrucciones: " << endl;
             cout << "PASOS PARA JUGAR SDHUDHUSHUD" << endl;
             break;
         case 3: {
-            // Crear una ventana de SFML
-            sf::RenderWindow window(sf::VideoMode(2000, 1000), "MENU");
+            
+            sf::RenderWindow window(sf::VideoMode(1600, 800), "Seleccionar personaje");
 
-            //Cambiar por imagen de fondo 
-            sf::RectangleShape background(sf::Vector2f(2000, 1000));
-            background.setFillColor(sf::Color(255, 165, 0)); // Naranja
+            sf::Font font;
+            if (!font.loadFromFile("Texture/Lato-Black.ttf")) {
+                std::cerr << "Error al cargar la fuente " << std::endl;
+                return EXIT_FAILURE;
+            }
 
-            // Cargar 
+            sf::Texture texture_background;
+            if (!texture_background.loadFromFile("Texture/imagenfondo.jpeg")) {
+                std::cerr << "error imagen fondo" << std::endl;
+                return EXIT_FAILURE;
+            }
+            sf::Sprite sprite_background(texture_background);
+
+            sprite_background.setScale(window.getSize().x / sprite_background.getLocalBounds().width, window.getSize().y / sprite_background.getLocalBounds().height);
+
+
+            sf::Text text("Seleccionar tu personaje", font);
+            text.setCharacterSize(60);
+            text.setFillColor(sf::Color::White);
+            text.setStyle(sf::Text::Bold);
+
+            sf::FloatRect textBounds = text.getLocalBounds();
+            text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
+            text.setPosition(window.getSize().x / 2.0f, 100);
+
+            text.setOutlineColor(sf::Color::Black);
+            text.setOutlineThickness(2);
+
             sf::Texture texture_apo;
             sf::Texture texture_ant;
             sf::Texture texture_ale;
@@ -119,58 +174,105 @@ int main() {
 
             if (!texture_apo.loadFromFile("personajeapo.png") ||
                 !texture_ant.loadFromFile("personajeant.png") ||
-                !texture_ale.loadFromFile("personajeale.jpeg") ||
-                !texture_alicia.loadFromFile("personajealicia.jpeg")) {
+                !texture_ale.loadFromFile("personajeale.png") ||
+                !texture_alicia.loadFromFile("personajealicia.png")) {
                 std::cerr << "Error al cargar" << std::endl;
-                return 1; // Salir con error
+                return EXIT_FAILURE;
             }
 
-            // Crear sprites para cada imagen
             sf::Sprite sprite_apo(texture_apo);
             sf::Sprite sprite_ant(texture_ant);
             sf::Sprite sprite_ale(texture_ale);
             sf::Sprite sprite_alicia(texture_alicia);
 
-            // size de cada un
-            sprite_apo.setScale(2.0f, 2.0f);
-            sprite_ant.setScale(2.0f, 2.0f);
-            sprite_ale.setScale(2.0f, 2.0f);
-            sprite_alicia.setScale(2.0f, 2.0f);
+            sprite_apo.setScale(1.5f, 1.5f);
+            sprite_ant.setScale(1.5f, 1.5f);
+            sprite_ale.setScale(1.5f, 1.5f);
+            sprite_alicia.setScale(1.5f, 1.5f);
 
-            //posicion
-            sprite_apo.setPosition(100, 100);
-            sprite_ant.setPosition(400, 100);
-            sprite_ale.setPosition(800, 100);
-            sprite_alicia.setPosition(1500, 100);
+            sprite_apo.setPosition(window.getSize().x / 8.0f - sprite_apo.getGlobalBounds().width / 2, 200);
+            sprite_ant.setPosition(window.getSize().x / 8.0f * 3 - sprite_ant.getGlobalBounds().width / 2, 200);
+            sprite_ale.setPosition(window.getSize().x / 8.0f * 5 - sprite_ale.getGlobalBounds().width / 2, 200);
+            sprite_alicia.setPosition(window.getSize().x / 8.0f * 7 - sprite_alicia.getGlobalBounds().width / 2, 200);
 
-            // Imprimir texto en la consola
-            std::cout << "Selecciona tu personaje" << std::endl;
+            sf::Text text_apo("Apo", font);
+            sf::Text text_ant("Ant", font);
+            sf::Text text_ale("Ale", font);
+            sf::Text text_alicia("Alicia", font);
 
-            // Bucle principal
+            text_apo.setCharacterSize(30);
+            text_ant.setCharacterSize(30);
+            text_ale.setCharacterSize(30);
+            text_alicia.setCharacterSize(30);
+
+            text_apo.setFillColor(sf::Color::White);
+            text_ant.setFillColor(sf::Color::White);
+            text_ale.setFillColor(sf::Color::White);
+            text_alicia.setFillColor(sf::Color::White);
+
+            text_apo.setPosition(sprite_apo.getPosition().x + sprite_apo.getGlobalBounds().width / 2 - text_apo.getGlobalBounds().width / 2, sprite_apo.getPosition().y + sprite_apo.getGlobalBounds().height + 10);
+            text_ant.setPosition(sprite_ant.getPosition().x + sprite_ant.getGlobalBounds().width / 2 - text_ant.getGlobalBounds().width / 2, sprite_ant.getPosition().y + sprite_ant.getGlobalBounds().height + 10);
+            text_ale.setPosition(sprite_ale.getPosition().x + sprite_ale.getGlobalBounds().width / 2 - text_ale.getGlobalBounds().width / 2, sprite_ale.getPosition().y + sprite_ale.getGlobalBounds().height + 10);
+            text_alicia.setPosition(sprite_alicia.getPosition().x + sprite_alicia.getGlobalBounds().width / 2 - text_alicia.getGlobalBounds().width / 2, sprite_alicia.getPosition().y + sprite_alicia.getGlobalBounds().height + 10);
+
+            text_apo.setOutlineColor(sf::Color::Black);
+            text_apo.setOutlineThickness(2);
+            text_ant.setOutlineColor(sf::Color::Black);
+            text_ant.setOutlineThickness(2);
+            text_ale.setOutlineColor(sf::Color::Black);
+            text_ale.setOutlineThickness(2);
+            text_alicia.setOutlineColor(sf::Color::Black);
+            text_alicia.setOutlineThickness(2);
+
             while (window.isOpen()) {
-                // Manejar eventos
                 sf::Event event;
                 while (window.pollEvent(event)) {
-                    if (event.type == sf::Event::Closed)
+                    if (event.type == sf::Event::Closed) {
                         window.close();
+                    }
+
+                    if (event.type == sf::Event::KeyPressed) {
+                        text_apo.setFillColor(sf::Color::White);
+                        text_ant.setFillColor(sf::Color::White);
+                        text_ale.setFillColor(sf::Color::White);
+                        text_alicia.setFillColor(sf::Color::White);
+
+                        if (event.key.code == sf::Keyboard::Left) {
+                            text_apo.setFillColor(sf::Color::Blue);
+                        }
+                        else if (event.key.code == sf::Keyboard::Right) {
+                            text_ant.setFillColor(sf::Color::Blue);
+                        }
+                        else if (event.key.code == sf::Keyboard::Up) {
+                            text_ale.setFillColor(sf::Color::Blue);
+                        }
+                        else if (event.key.code == sf::Keyboard::Down) {
+                            text_alicia.setFillColor(sf::Color::Blue);
+                        }
+                    }
                 }
 
-                // Limpiar la ventana
                 window.clear();
+                window.draw(sprite_background);
+                window.draw(text);
 
-                // Dibujar los sprites en la ventana
                 window.draw(sprite_apo);
                 window.draw(sprite_ant);
                 window.draw(sprite_ale);
                 window.draw(sprite_alicia);
 
-                // Mostrar la ventana
+                window.draw(text_apo);
+                window.draw(text_ant);
+                window.draw(text_ale);
+                window.draw(text_alicia);
+
                 window.display();
             }
 
-
-            break;
+            return 0;
         }
+
+
         case 4:
             cout << "Cerrando..." << endl;
             break;
@@ -181,5 +283,4 @@ int main() {
 
     return 0;
 }
-
 
