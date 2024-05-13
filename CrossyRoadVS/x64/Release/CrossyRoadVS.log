@@ -1,0 +1,2 @@
+﻿  CrossyRoadVS.cpp
+C:\Users\aledo\source\repos\CrossyRoadVS\CrossyRoadVS\CrossyRoadVS.cpp(4,10): error C1083: Cannot open include file: 'SFML/Graphics.hpp': No such file or directory
