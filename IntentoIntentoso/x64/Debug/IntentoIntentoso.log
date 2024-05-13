@@ -1,0 +1,25 @@
+﻿  SFMLTemplate.cpp
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(113,36): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(113,36): warning C4244:         with
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(113,36): warning C4244:         [
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(113,36): warning C4244:             T=float
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(113,36): warning C4244:         ]
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(273,72): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(273,72): warning C4244:         with
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(273,72): warning C4244:         [
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(273,72): warning C4244:             T=float
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(273,72): warning C4244:         ]
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,59): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,59): warning C4244:         with
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,59): warning C4244:         [
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,59): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,59): warning C4244:         ]
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,39): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,39): warning C4244:         with
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,39): warning C4244:         [
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,39): warning C4244:             T=unsigned int
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(330,39): warning C4244:         ]
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(374,80): warning C4244: 'argument': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(377,43): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\alici\source\repos\IntentoIntentoso\IntentoIntentoso\SFMLTemplate.cpp(527,113): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  IntentoIntentoso.vcxproj -> C:\Users\alici\source\repos\IntentoIntentoso\x64\Debug\IntentoIntentoso.exe
