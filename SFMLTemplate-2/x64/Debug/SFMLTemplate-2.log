@@ -1,0 +1,10 @@
+﻿  SFMLTemplate-2.cpp
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(399,36): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(399,36): warning C4244:         with
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(399,36): warning C4244:         [
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(399,36): warning C4244:             T=float
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(399,36): warning C4244:         ]
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(678,82): warning C4244: 'argument': conversion from 'float' to 'unsigned __int64', possible loss of data
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(681,45): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\alici\source\repos\SFMLTemplate-2\SFMLTemplate-2\SFMLTemplate-2.cpp(812,115): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SFMLTemplate-2.vcxproj -> C:\Users\alici\source\repos\SFMLTemplate-2\x64\Debug\SFMLTemplate-2.exe
